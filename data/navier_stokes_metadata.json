@@ -1,0 +1,13 @@
+{
+  "dataset_name": "navier_stokes",
+  "image_size": 64,
+  "train_csv": "data/navier_stokes_train.csv",
+  "val_csv": "data/navier_stokes_val.csv",
+  "train_samples": 1408,
+  "val_samples": 352,
+  "rollout_trajectories": 16,
+  "format": {
+    "input_field": "single string column containing flattened CxHxW values separated by spaces",
+    "target_field": "single string column containing flattened CxHxW values separated by spaces"
+  }
+}

@@ -1,0 +1,75 @@
+data:
+  dataset_name: navier_stokes
+  image_size: 64
+  in_channels: 1
+  train_trajectories: 128
+  val_trajectories: 32
+  rollout_trajectories: 16
+  trajectory_length: 12
+  rollout_horizon: 50
+  dt: 0.05
+  viscosity: 0.002
+  diffusion_rate: 0.075
+  burgers_viscosity: 0.01
+  forcing_scale: 0.04
+  noise_std: 0.001
+  seed: 42
+
+model:
+  in_channels: 1
+  out_channels: 1
+  widths: [64, 128, 256, 512]
+  blocks_per_level: 2
+  expansion: 4
+  stem_kernel_size: 3
+  spectral_bands: 8
+  spectral_gate_hidden_dim: 32
+  init_cutoff_height: 0.25
+  init_cutoff_width: 0.25
+  fft_norm: ortho
+  drop_path_rate: 0.05
+  layer_scale_init_value: 1.0e-6
+  enable_local_branch: true
+  enable_spectral_branch: true
+  enable_low_frequency_mixing: true
+  enable_radial_gating: true
+
+training:
+  run_name: driftnet_navier_stokes
+  batch_size: 8
+  epochs: 25
+  learning_rate: 1.0e-4
+  min_learning_rate: 1.0e-6
+  weight_decay: 1.0e-4
+  grad_clip_norm: 1.0
+  mixed_precision: false
+  num_workers: 0
+  log_every: 10
+  save_every: 5
+
+loss:
+  lambda_frequency: 0.05
+  frequency_power: 2.0
+  frequency_bias: 1.0
+
+experiments:
+  ablation:
+    epochs: 20
+  rollout:
+    horizon: 50
+  efficiency:
+    warmup_steps: 10
+    benchmark_steps: 50
+  surrogate:
+    note: "DRIFTNet vs scOT-inspired baseline and a single-resolution DRIFT operator network"
+
+scot:
+  in_channels: 1
+  out_channels: 1
+  widths: [64, 128, 256, 512]
+  blocks_per_level: 2
+  num_heads: [4, 4, 8, 8]
+  window_size: 8
+  mlp_ratio: 4.0
+  drop_path_rate: 0.05
+  convnext_expansion: 4
